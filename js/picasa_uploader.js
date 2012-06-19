@@ -96,15 +96,15 @@
 		};
 		gapi.auth.authorize(config, function() {
 			token = gapi.auth.getToken();
-			$('googleToken').val(token);
-			$('googleLogin').hide();
+			$('#googleToken').val(token);
+			$('#googleLogin').hide();
 			req = gapi.client.request({
 				path: '/blogger/v2/users/self/blogs'
 			});
 			req.execute(function (data) {
 				for(i in data.items)
 				{
-					$('#blogList').append('<option value="'data.items[i].id'">'+data.items[i].name+'</option>');
+					$('#blogList').append('<option value="'+data.items[i].id+'">'+data.items[i].name+'</option>');
 				}
 				$('#blogList').show();
 			});

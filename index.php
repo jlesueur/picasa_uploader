@@ -86,7 +86,7 @@ $root = Gallery3::factory("$SITE_URL/item/$intRootAlbum?type=album&scope=all", $
 <div id="content">
 <h2> Upload your photos from Picasa </h2>
 <form method="post" action="classes/post.php" id="postfiles" enctype="multipart/form-data" >
-	<input type="hidden" name="googleToken"/>
+	<input type="hidden" name="googleToken" id="googleToken"/>
 <fieldset>
 <label class="title">Choose album to upload to</label>
 <br /><br />
@@ -121,7 +121,7 @@ function get_albums($acest_album,$auth_k,$k) {
       </div>
       <div>
 		<input id="googleLogin" type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
-		<select style="display:none" name="blogList" id="bloglist"></select>
+		<select style="display:none" name="blogList" id="blogList"></select>
       </div>
 </fieldset>
 <h3>Selected Images</h3>
