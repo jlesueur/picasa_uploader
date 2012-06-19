@@ -42,7 +42,7 @@ else {
 		($RMB == 'on')? setcookie("a_tkG3", $auth, $expire):setcookie("a_tkG3", $auth, "-1");
 	}
 }
-$root = Gallery3::factory("$SITE_URL/item/$intRootAlbum", $auth);
+$root = Gallery3::factory("$SITE_URL/item/$intRootAlbum?type=album&scope=all", $auth);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -57,9 +57,38 @@ $root = Gallery3::factory("$SITE_URL/item/$intRootAlbum", $auth);
 <link rel="stylesheet" href="css/picasa_uploader.css" type="text/css" media="screen" />
 
   <script type="text/javascript" src="js/picasa_uploader.js"></script>
-<!--   <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script> -->
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript">
+google.load('gdata', '1.x');
+$(function () { 
+	//google.setOnLoadCallBack(setupLogin);
+	setupLogin();
+});
 
-
+function setupLogin()
+{
+	var myService = new google.gdata.blogger.BloggerService('picasa-gallery3-uploader');
+	scope = 'http://www.blogger.com/feeds/';
+	if(google.accounts.user.checkLogin(scope))
+	{
+		$('#googleLogin').bind('click', function() {
+			token = google.accounts.user.login(scope);
+		});
+	}
+	else
+	{
+		$('#googleLogin').hide();
+		myService.getBlogFeed(scope + 'default/blogs', function(feedRoot) {
+			var feed = feedRoot.feed;
+			var entries = feed.entry;
+			alert(entries);
+		}, function (error) {
+			alert(error);
+		});
+	}
+}
+  </script>
   
   </head>
 <body onload="javscript:sf()">
@@ -97,11 +126,16 @@ function get_albums($acest_album,$auth_k,$k) {
       </select>
 	&nbsp;&nbsp;&nbsp;<input type="button" onclick="frmPicasa_display_new(); return false" class="button" value="New Album" />
 	      <div id="new" style="display:none">
-        <label for="titleAlbum">Path name</label> <input type="text" id="albumPath" name="albumPath" /> <em>e.g. : october-2007</em><br />
-        <label for="albumTitle">Title</label> <input type="text" id="albumTitle" name="albumTitle" /> <em>e.g. : October 2007</em><br />
+<?php /*        <label for="albumPath">Path name</label> <input type="text" id="albumPath" name="albumPath" /> <em>e.g. : october-2007</em><br /> */ ?>
+        <label for="albumTitle">Title</label> <input type="text" id="albumTitle" name="albumTitle" value="<?php date('Y-m-d'); ?>"/> <em>e.g. : October 2007</em><br />
         <input type="button" onclick="frmPicasa_xhr_new(); return false" class="button" value="Create" />
-      </div>      
-
+      </div>
+      <div>      
+        <label for="blogThis">Publish to Blog:</label> <input type="checkbox" id="blogThis" name="blogThis" value="1" checked/>
+        <div id="blogList">
+           <input type="button" class="button" id="googleLogin" name="googleLogin" value="Login to Blogger">
+        </div>
+      </div>
 </fieldset>
 <h3>Selected Images</h3>
 <input type='hidden' name='rss' id='rss' value='<?php echo $rss ?>' />
