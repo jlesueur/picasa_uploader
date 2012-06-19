@@ -1,0 +1,11 @@
+.button,
+.pagination a.number,
+form input.text-input,
+form button,
+form textarea,
+form .wysiwyg,
+form select {
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+				border-radius: 4px;
+			}
