@@ -94,3 +94,22 @@
 				// Must return false or the browser will refresh anyway
 			}
 	}
+	
+	function validateGoogleToken() {
+		var config = {
+			'client_id': '367339197840.apps.googleusercontent.com',
+			'scope': 'https://www.googleapis.com/auth/blogger'
+		};
+		gapi.auth.authorize(config, function() {
+			token = gapi.auth.getToken();
+			$('googleToken').val(token);
+			$('googleLogin').hide();
+			req = gapi.client.request({
+				path: '/blogger/v2/users/self/blogs'
+			});
+			req.execute(function (data) {
+				alert(data);
+			});
+		});
+	}
+
