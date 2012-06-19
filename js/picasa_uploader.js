@@ -22,15 +22,10 @@
     }
     
     function frmPicasa_xhr_new() {
-      albumPath = document.getElementById('albumPath');
       albumTitle = document.getElementById('albumTitle');
-	  //e = document.getElementById('album');
+      //e = document.getElementById('album');
 	  
 
-      if (albumPath.value == '') {
-        alert('Provide a file name for the album.');
-        return false;
-      }
       if (albumTitle.value == '') {
         alert('Provide an album title.');
         return false;
@@ -60,7 +55,7 @@
       var element = document.getElementById('album');
 	  albumParent = element.options[element.selectedIndex].id;
 
-      xmlhttp.open('GET', 'classes/add_album_xmlhttp.php?path=' + albumPath.value + '&title=' + albumTitle.value + '&parent=' + albumParent);
+      xmlhttp.open('GET', 'classes/add_album_xmlhttp.php?title=' + albumTitle.value + '&parent=' + albumParent);
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {  
           eval(xmlhttp.responseText);
@@ -68,7 +63,6 @@
             element.options[element.options.length] = o;
             element.selectedIndex = element.options.length - 1;
             frmPicasa_display_new();
-			albumPath.value = '';
 			albumTitle.value = '';
         }
       }
