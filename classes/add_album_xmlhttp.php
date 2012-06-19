@@ -20,7 +20,7 @@ $parentAlbum = $_GET['parent'];
 $root = Gallery3::factory("$SITE_URL/item/$parentAlbum", $auth);
 $album = Gallery3::factory()
   ->set('type', 'album')
-  ->set('name', $_GET['path'])
+  ->set('name', preg_replace("/[^a-z0-9\-\_]+/", "", strtolower($_GET['title'])))
   ->set('title', $_GET['title'])
   ->create($root->url, $auth);
 echo 'var arrXmlhttp = new Array(Array(\''. $album->url .'\',\''. $album->data->entity->title .'\'));';

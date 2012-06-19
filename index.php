@@ -60,7 +60,7 @@ else {
 		($RMB == 'on')? setcookie("a_tkG3", $auth, $expire):setcookie("a_tkG3", $auth, "-1");
 	}
 }
-$root = Gallery3::factory("$SITE_URL/item/$intRootAlbum", $auth);
+$root = Gallery3::factory("$SITE_URL/item/$intRootAlbum?type=album&scope=all", $auth);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -115,14 +115,13 @@ function get_albums($acest_album,$auth_k,$k) {
       </select>
 	&nbsp;&nbsp;&nbsp;<input type="button" onclick="frmPicasa_display_new(); return false" class="button" value="New Album" />
 	      <div id="new" style="display:none">
-        <label for="titleAlbum">Path name</label> <input type="text" id="albumPath" name="albumPath" /> <em>e.g. : october-2007</em><br />
-        <label for="albumTitle">Title</label> <input type="text" id="albumTitle" name="albumTitle" /> <em>e.g. : October 2007</em><br />
+<?php /*        <label for="albumPath">Path name</label> <input type="text" id="albumPath" name="albumPath" /> <em>e.g. : october-2007</em><br /> */ ?>
+        <label for="albumTitle">Title</label> <input type="text" id="albumTitle" name="albumTitle" value="<?php date('Y-m-d'); ?>"/> <em>e.g. : October 2007</em><br />
         <input type="button" onclick="frmPicasa_xhr_new(); return false" class="button" value="Create" />
       </div>
       <div>
-		<input type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
+		<input id="googleLogin" type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
       </div>
-
 </fieldset>
 <h3>Selected Images</h3>
 <input type='hidden' name='rss' id='rss' value='<?php echo $rss ?>' />
