@@ -121,6 +121,7 @@ function get_albums($acest_album,$auth_k,$k) {
       </div>
       <div>
 		<input id="googleLogin" type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
+		<select style="display:none" name="blogList" id="bloglist"></select>
       </div>
 </fieldset>
 <h3>Selected Images</h3>
