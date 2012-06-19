@@ -1,6 +1,7 @@
+google.load("gdata", "1.x");
     function sf() { 
 	  //frmLogin_err();
-      document.getElementById('album').focus();     
+      document.getElementById('album').focus();
     }
     
 	function frmLogin_err() {
@@ -90,6 +91,33 @@
 	}
 	
 	function validateGoogleToken() {
+		
+		var myService = new google.gdata.blogger.BloggerService('picasa-gallery3-uploader');
+		scope = 'http://www.blogger.com/feeds/';
+		if(!google.accounts.user.checkLogin(scope))
+		{
+			$('#googleLogin').bind('click', function() {
+				token = google.accounts.user.login(scope);
+			});
+		}
+		else
+		{
+			myService.getBlogFeed(scope, function(feedRoot) {
+				var feed = feedRoot.feed;
+				var entries = feed.entry;
+				for(i in entries)
+				{
+					alert(i + ': ' + entry[i]);
+				}
+			}, function (error) {
+				alert(error);
+			});
+			$('#googleToken').val(token);
+			$('#googleLogin').hide();
+		}
+		/**
+		 * This version of the api doesn't yet support writing to the blog. In the near future, it will, but we can't use it yet.
+		 * 
 		var config = {
 			'client_id': '367339197840.apps.googleusercontent.com',
 			'scope': 'https://www.googleapis.com/auth/blogger'
@@ -109,5 +137,6 @@
 				$('#blogList').show();
 			});
 		});
+		*/
 	}
 
