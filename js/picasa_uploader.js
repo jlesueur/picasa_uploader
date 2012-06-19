@@ -108,7 +108,11 @@
 				path: '/blogger/v2/users/self/blogs'
 			});
 			req.execute(function (data) {
-				alert(data);
+				for(i in data.items)
+				{
+					$('#blogList').append('<option value="'data.items[i].id'">'+data.items[i].name+'</option>');
+				}
+				$('#blogList').show();
 			});
 		});
 	}
