@@ -30,7 +30,7 @@ class Admin_picasa_uploader_Controller extends Admin_Controller {
 		$create_buton = Input::instance()->post("button_create");
 		$intR = Input::instance()->post("intR");
 		$intd = Input::instance()->post("intd");
-		$resz = Input::instance()->post("resz");	
+		$resz = Input::instance()->post("resz");
 			$id_but = $this->setGUID();
 			$this->_write_pbf_file($id_but);
 			$this->_write_pbz_file($id_but);
@@ -101,7 +101,7 @@ class Admin_picasa_uploader_Controller extends Admin_Controller {
 	$val_cfg = $this->_read_cfg_file();
     $group = $form->group("group")->label("module settings");
 	$group->input("intR")->label(t("Root album id"))->value($val_cfg['intR']);
-	$group->input("intd")->label(t("Int Display"))->value($val_cfg['intd']);
+	$group->input("intd")->label(t("# of Albums to Display"))->value($val_cfg['intd']);
 	$group->input("resz")->label(t("Resize"))->value($val_cfg['resz']);
 	$picasaG3_buton = "picasa_uploader.pbz";
 	(file_exists(MODPATH . "picasa_uploader/libraries/".$picasaG3_buton)) ? $new_bt = "new" : $new_bt ="";
@@ -238,14 +238,15 @@ private function _read_cfg_file() {
 		<p><i>INFO</i>: REST API current address (<i> for config.xml</i>): '.$val_cfg['site'].'</p>
 		<p><i>INFO</i>: <a href="http://pear.php.net/" target="_blank">PEAR - PHP Extension and Application Repository</a> help</p>
       <p><b>Root album id</b> - <i>specify the root album ID, this can be the Gallery root or an special album within you can upload your files (eg an album hidden from guest so after upload you can move your files into another album </i><br />
-      <br /><b>Int display</b> - <i>Number of albums to display. If 0 display all</i><br />
-	  <br /><b>Resize</b> - <i>Size (pixel) to resize uploaded photo. If 0 keep original size (resizes will be managed by G3 either way)</i></li>
+      <br /><b># of Albums to Display</b> - <i>Number of albums to display. If 0 display all</i><br />
+	  <br /><b>Resize</b> - <i>Size (pixel) to resize uploaded photo. If 0 keep original size (resizes will be managed by G3 either way)</i><br />
+          </li>
 	  <li>
 	  <b>Note: </b> <i style=" color: red;" >Number of uploaded files depends on upload_max_filesize an post_max_size directive of php config file!</i>
 	  <i style="font-size:xx-small;">
 		  Files are usually POSTed to the webserver in a format known as \'multipart/form-data\'. The post_max_size sets the upper limit on the amount of data that a script can accept in this manner. Ideally this value should be larger than the value that you set for upload_max_filesize.
 <br />
-	It\'s important to realize that upload_max_filesize is the sum of the sizes of all the files that you are uploading. post_max_size is the upload_max_filesize plus the sum of the lengths of all the other fields in the form plus any mime headers that the encoder might include. Since these fields are typically small you can often approximate the upload max size to the post max size. 
+	It\'s important to realize that upload_max_filesize is the sum of the sizes of all the files that you are uploading. post_max_size is the upload_max_filesize plus the sum of the lengths of all the other fields in the form plus any mime headers that the encoder might include. Since these fields are typically small you can often approximate the upload max size to the post max size. Your server\'s post_max_size is ' . ini_get('post_max_size') . '
 	</i>
       </li>';
     $help .= '</ul></fieldset>';
