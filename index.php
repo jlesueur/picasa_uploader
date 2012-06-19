@@ -9,7 +9,25 @@ $rss = $_POST['rss'];
 	$intSize = (int)$xml->intSize;
 require('classes/Gallery3.php');
 require('classes/xmlHandler.class');
- 
+
+//before doing anything, catch the google auth token.
+/*
+$url = $_SERVER['REQUEST_URI'];
+$fragment = parse_url($url, PHP_URL_FRAGMENT);
+preg_match_all('/([^&=]+)=([^&]*)/gm', $fragment, $matches = array(), PREG_SET_ORDER);
+foreach($matches[0] as $keyPos => $key)
+{
+	$params[urldecode($key)] = urldecode($matches[1][$keyPos]);
+}
+if(isset($params['access_token'])) {
+	$token = $params['access_token'];
+	setcookie("googleToken", $token, time() + $params['expires_in']);
+}
+elseif(isset($_COOKIE['googleToken'])) {
+	$token = $_COOKIE['googleToken'];
+}
+*/
+
 if (isset($_COOKIE['a_tkG3']) && $_COOKIE['a_tkG3'] != '' ){ 
 	$auth = $_COOKIE['a_tkG3'];
 }
@@ -56,41 +74,11 @@ $root = Gallery3::factory("$SITE_URL/item/$intRootAlbum?type=album&scope=all", $
 <!-- Main Stylesheet -->
 <link rel="stylesheet" href="css/picasa_uploader.css" type="text/css" media="screen" />
 
-  <script type="text/javascript" src="js/picasa_uploader.js"></script>
-  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script type="text/javascript">
-google.load('gdata', '1.x');
-$(function () { 
-	//google.setOnLoadCallBack(setupLogin);
-	setupLogin();
-});
-
-function setupLogin()
-{
-	var myService = new google.gdata.blogger.BloggerService('picasa-gallery3-uploader');
-	scope = 'http://www.blogger.com/feeds/';
-	if(google.accounts.user.checkLogin(scope))
-	{
-		$('#googleLogin').bind('click', function() {
-			token = google.accounts.user.login(scope);
-		});
-	}
-	else
-	{
-		$('#googleLogin').hide();
-		myService.getBlogFeed(scope + 'default/blogs', function(feedRoot) {
-			var feed = feedRoot.feed;
-			var entries = feed.entry;
-			alert(entries);
-		}, function (error) {
-			alert(error);
-		});
-	}
-}
-  </script>
+  <script type="text/javascript" src="js/picasa_uploader.js"></script>
   
-  </head>
+</head>
 <body onload="javscript:sf()">
 <div id="header">
     <img id="logo" src="css/picasa_upl_logo.png" alt="" class="left">
@@ -98,6 +86,7 @@ function setupLogin()
 <div id="content">
 <h2> Upload your photos from Picasa </h2>
 <form method="post" action="classes/post.php" id="postfiles" enctype="multipart/form-data" >
+	<input type="hidden" name="googleToken"/>
 <fieldset>
 <label class="title">Choose album to upload to</label>
 <br /><br />
@@ -130,11 +119,8 @@ function get_albums($acest_album,$auth_k,$k) {
         <label for="albumTitle">Title</label> <input type="text" id="albumTitle" name="albumTitle" value="<?php date('Y-m-d'); ?>"/> <em>e.g. : October 2007</em><br />
         <input type="button" onclick="frmPicasa_xhr_new(); return false" class="button" value="Create" />
       </div>
-      <div>      
-        <label for="blogThis">Publish to Blog:</label> <input type="checkbox" id="blogThis" name="blogThis" value="1" checked/>
-        <div id="blogList">
-           <input type="button" class="button" id="googleLogin" name="googleLogin" value="Login to Blogger">
-        </div>
+      <div>
+		<input id="googleLogin" type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
       </div>
 </fieldset>
 <h3>Selected Images</h3>

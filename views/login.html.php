@@ -30,7 +30,7 @@ $er = (isset($_GET['er'])) ? $_GET['er'] : 0;
     <img id="logo" src="../css/picasa_upl_logo.png" alt="" class="left">
 </div>
   <div id="login-content">
-   <?php if($er == 0){?>
+   <?php if($er !== 0){?>
 	      <div class="notification attention">
 			<div>Username and Password Case sensitive!. </div>
 		  </div>
