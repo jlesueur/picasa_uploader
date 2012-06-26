@@ -74,11 +74,17 @@ $root = Gallery3::factory("$SITE_URL/item/$intRootAlbum?type=album&scope=all", $
 <!-- Main Stylesheet -->
 <link rel="stylesheet" href="css/picasa_uploader.css" type="text/css" media="screen" />
 
-  <!-- this is the deprecated javascript api, that we have to use to have write access to blogs --><script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <!-- this is the deprecated javascript api, that we have to use to have write access to blogs <script type="text/javascript" src="http://www.google.com/jsapi"></script> -->
   <!-- this is the new javascript api, but it's read-only <script type="text/javascript" src="https://apis.google.com/js/client.js"></script> -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script type="text/javascript" src="js/picasa_uploader.js"></script>
-  
+  <script src="https://apis.google.com/js/auth.js?onload=prepAuthorization"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script>
+function googleAuthorized()
+{
+	grabBlogs();
+}
+</script>
 </head>
 <body onload="javscript:sf()">
 <div id="header">
@@ -121,8 +127,11 @@ function get_albums($acest_album,$auth_k,$k) {
         <input type="button" onclick="frmPicasa_xhr_new(); return false" class="button" value="Create" />
       </div>
       <div>
-		<input id="googleLogin" type="button" onclick="validateGoogleToken(); return false;" class="button" value="Publish To Blogger" />
-		<select style="display:none" name="blogList" id="blogList"></select>
+		<input id="googleLogin" style="display:none" type="button" class="button" value="Publish To Blogger" />
+		<div id="blogDiv" style="display: none">
+			<input type="checkbox" name="blogThis" value="1" checked /> Publish to my blog:<br/>
+			<select name="blogList" id="blogList"></select>
+		</div>
       </div>
 </fieldset>
 <h3>Selected Images</h3>

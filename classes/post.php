@@ -1,4 +1,13 @@
 ﻿<?php
+$filename = "../libraries/config.xml";
+$xml = simplexml_load_file($filename);
+$SITE_URL = $xml->siteUrl;
+//find index.php, trim everything after it.
+if(strpos($SITE_URL, 'index.php') !== false)
+	$SITE_URL = substr($SITE_URL, 0, strpos($SITE_URL, 'index.php'));
+//find rest, trim everything after it.
+if(strpos($SITE_URL, 'rest') !== false)
+	$SITE_URL = substr($SITE_URL, 0, strpos($SITE_URL, 'rest'));
 require('Gallery3.php');
 
 if (isset($_COOKIE['a_tkG3']) && $_COOKIE['a_tkG3'] != '' ){ 
@@ -6,7 +15,7 @@ if (isset($_COOKIE['a_tkG3']) && $_COOKIE['a_tkG3'] != '' ){
 }
 else {
 	header("Location: ../index.php"); 
-	}
+}
 
 	$album = Gallery3::factory($_POST['album'], $auth);
 
@@ -25,13 +34,17 @@ if($_FILES) {
             ->create($album->url, $auth);
           if(isset($_POST['blogThis'])) {
             //build a blog entry...
+            $blogIds[] = $photo->data->entity->id;
             $blog .= '<div><a href="'.$photo->data->entity->file_url_public.'"><img src="'.$photo->data->entity->resize_url_public.'" /></a></div>';
           }
         }
     }
     if(isset($_POST['blogThis']))
     {
-        trigger_error("blog looks like: " . var_export($blog,true));
+	echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&ids='.urlencode(implode(',', $blogIds)).'&blogId='.urlencode($_POST['blogList']);
+        //trigger_error("blog looks like: " . var_export($blog,true));
     }
 }
+else
+    echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&blogId='.urlencode($_POST['blogList']).'&ids='.urlencode(implode(',',array(224,297)));
 ?>

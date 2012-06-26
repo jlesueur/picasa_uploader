@@ -24,13 +24,14 @@ function verifythis(){
 </head>
 <?php 
 $er = (isset($_GET['er'])) ? $_GET['er'] : 0;
+$action = (isset($_GET['action'])) ? $_GET['action'] : 'upload';
 ?>
 <body id="login">
 <div id="header">
     <img id="logo" src="../css/picasa_upl_logo.png" alt="" class="left">
 </div>
   <div id="login-content">
-   <?php if($er !== 0){?>
+   <?php if($er == 0){?>
 	      <div class="notification attention">
 			<div>Username and Password Case sensitive!. </div>
 		  </div>
@@ -38,8 +39,8 @@ $er = (isset($_GET['er'])) ? $_GET['er'] : 0;
  	      <div class="notification error">
 			<div>Username or Password Incorrect!. </div>
 		  </div>
-   <?php } ?>  
-	   <form action="../index.php" method="post" onSubmit="return verifythis()">
+   <?php } ?>
+	   <form action="<?php if($action == 'upload') { ?>../index.php<?php } else { ?>../postBlogger.php<?php } ?>" method="post" onSubmit="return verifythis()">
 	   <?php 
 	   $rss = $_POST['rss'];
 	   echo "<input type='hidden' name='rss' value='$rss' />";

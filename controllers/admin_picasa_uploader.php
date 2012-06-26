@@ -140,7 +140,7 @@ private function _read_cfg_file() {
 	$Handle = fopen($cfg_path.$cfg_file, 'w');
 	$cfg_text = '<?xml version="1.0" encoding="iso-8859-1"?>
 <config>
-	<siteUrl>http://'.$_SERVER['SERVER_NAME'].url::site().'rest</siteUrl>
+	<siteUrl>' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://'.$_SERVER['SERVER_NAME'].url::site().'rest</siteUrl>
 	<intRootAlbum>'.$intR.'</intRootAlbum>
 	<intAlbumDisplayed>'.$intd.'</intAlbumDisplayed>
 	<intSize>'.$resz.'</intSize>
@@ -187,7 +187,7 @@ private function _read_cfg_file() {
 \t\t<label>Gallery3</label>
 \t\t<tooltip>Add to Gallery3 on ".$_SERVER['SERVER_NAME']."</tooltip>
 \t\t<action verb=\"hybrid\">
-\t\t\t<param name=\"url\" value=\"http://".$_SERVER['SERVER_NAME'].str_replace('index.php/','',url::site())."modules/picasa_uploader/\" />
+\t\t\t<param name=\"url\" value=\"" . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . "://".$_SERVER['SERVER_NAME'].str_replace('index.php/','',url::site())."modules/picasa_uploader/\" />
 \t\t</action>
 \t</button>
 </buttons>";

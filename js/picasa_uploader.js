@@ -1,4 +1,129 @@
-google.load("gdata", "1.x");
+function prepAuthorization(token) {
+	//alert('prepAuthorization');
+	var clientId = '367339197840.apps.googleusercontent.com';
+	var scopes = 'https://www.googleapis.com/auth/blogger';
+	var apiKey = 'AIzaSyABDIlFipmDN1FpEEthYF9zbTOKqh6cf24';
+	//gapi.client.setApiKey(apiKey);
+	window.setTimeout(function () {
+		//alert('authorize');
+		gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function (token) {
+			//alert('calling back..');
+			if (token && !token.error) {
+				$('#googleLogin').hide();
+				//populate the blog select
+				googleAuthorized();
+			}
+			else {
+				$('#googleLogin').show();
+				$('#googleLogin').click(function () {
+					gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function (token) {
+						if(token && !token.error) {
+							$('#googleLogin').hide();
+							//populate the blog select
+							googleAuthorized();
+						}
+					});
+						});
+			}
+		})
+	}, 1);
+}
+
+function grabBlogs()
+{
+	//alert('grabBlogs');
+	var oauthToken = gapi.auth.getToken();
+	$('#googleToken').val(oauthToken.access_token);
+	/*
+	if ('XDomainRequest' in window && window.XDomainRequest !== null) {
+ 
+		// override default jQuery transport
+		jQuery.ajaxSettings.xhr = function() {
+			try { return new XDomainRequest(); }
+			catch(e) { }
+		};
+ 
+		// also, override the support check
+		jQuery.support.cors = true;
+	}
+
+	settings = {
+		method: 'get',
+		url: 'https://www.googleapis.com/blogger/v3/users/self/blogs?access_token='+encodeURIComponent(oauthToken.access_token),
+		success: function(blogs) {
+			for(i in blogs.items)
+			{
+				$('#blogList').append('<option value="'+blogs.items[i].id+'">'+blogs.items[i].name+'</option>');
+			}
+			$('#blogDiv').show();
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus);
+			alert(errorThrown);
+			alert(typeof jqXHR);
+		},
+		dataType: 'json'
+	};
+	$.ajax(settings);
+	//*/
+	//*
+	if(typeof XDomainRequest != 'undefined')
+	{
+		var xhr = new XDomainRequest();
+		//alert('onload');
+		xhr.onload = function (e) {
+			blogs = $.parseJSON(xhr.responseText);
+			for(i in blogs.items)
+                        {
+				$('#blogList').append('<option value="'+blogs.items[i].id+'">'+blogs.items[i].name+'</option>');
+			}
+			$('#blogDiv').show();
+		};
+	}
+	else
+	{
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function (e) {
+			//alert(xhr);
+			if(xhr.readyState == 4)
+			{
+				if(xhr.status == 200)
+				{
+					blogs = $.parseJSON(xhr.responseText);
+					for(i in blogs.items)
+					{
+						$('#blogList').append('<option value="'+blogs.items[i].id+'">'+blogs.items[i].name+'</option>');
+					}
+					$('#blogDiv').show();
+				}
+				else
+				{
+					alert('status: ' + xhr.status);
+				}
+			}
+		};
+	}
+	//xhr.withCredentials = true;
+	xhr.open('GET',
+		'https://www.googleapis.com/blogger/v3/users/self/blogs' +
+		'?access_token=' + encodeURIComponent(oauthToken.access_token));
+	xhr.send();
+	//*/
+/*
+	blogReq = gapi.client.blogger.blogs.listByUser('self');
+	alert('blogReq');
+	
+	blogReq.execute(function(response) {
+		alert('hi');
+		alert(response);
+		for(i in response)
+			alert(i + ': ' + response[i]);
+	});
+	//for(i in blogs)
+	//	alert(i + ': ' + blogs[i]);
+*/
+}
+
     function sf() { 
 	  //frmLogin_err();
       document.getElementById('album').focus();
@@ -91,7 +216,7 @@ google.load("gdata", "1.x");
 	}
 	
 	function validateGoogleToken() {
-		
+		/**
 		var myService = new google.gdata.blogger.BloggerService('picasa-gallery3-uploader');
 		scope = 'http://www.blogger.com/feeds/';
 		if(!google.accounts.user.checkLogin(scope))
@@ -115,6 +240,7 @@ google.load("gdata", "1.x");
 			$('#googleToken').val(token);
 			$('#googleLogin').hide();
 		}
+		*/
 		/**
 		 * This version of the api doesn't yet support writing to the blog. In the near future, it will, but we can't use it yet.
 		 * 
