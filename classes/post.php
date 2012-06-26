@@ -33,18 +33,16 @@ if($_FILES) {
             ->set_file($tmpfile)
             ->create($album->url, $auth);
           if(isset($_POST['blogThis'])) {
-            //build a blog entry...
-            $blogIds[] = $photo->data->entity->id;
-            $blog .= '<div><a href="'.$photo->data->entity->file_url_public.'"><img src="'.$photo->data->entity->resize_url_public.'" /></a></div>';
+            $blogPhotos[] = $photo->data->entity->id;
           }
         }
     }
     if(isset($_POST['blogThis']))
     {
-	echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&ids='.urlencode(implode(',', $blogIds)).'&blogId='.urlencode($_POST['blogList']);
+	echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&ids='.urlencode(implode(',', $blogPhotos)).'&blogId='.urlencode($_POST['blogList']);
         //trigger_error("blog looks like: " . var_export($blog,true));
     }
 }
-else
-    echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&blogId='.urlencode($_POST['blogList']).'&ids='.urlencode(implode(',',array(224,297)));
+else if(isset($_POST['blogThis']))
+    echo $SITE_URL . "modules/picasa_uploader/postBlogger.php?googleToken=".urlencode($_POST['googleToken']).'&blogId='.urlencode($_POST['blogList']).'&ids='.urlencode(implode(',',array(1)));
 ?>

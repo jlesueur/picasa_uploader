@@ -10,24 +10,6 @@ $rss = $_POST['rss'];
 require('classes/Gallery3.php');
 require('classes/xmlHandler.class');
 
-//before doing anything, catch the google auth token.
-/*
-$url = $_SERVER['REQUEST_URI'];
-$fragment = parse_url($url, PHP_URL_FRAGMENT);
-preg_match_all('/([^&=]+)=([^&]*)/gm', $fragment, $matches = array(), PREG_SET_ORDER);
-foreach($matches[0] as $keyPos => $key)
-{
-	$params[urldecode($key)] = urldecode($matches[1][$keyPos]);
-}
-if(isset($params['access_token'])) {
-	$token = $params['access_token'];
-	setcookie("googleToken", $token, time() + $params['expires_in']);
-}
-elseif(isset($_COOKIE['googleToken'])) {
-	$token = $_COOKIE['googleToken'];
-}
-*/
-
 if (isset($_COOKIE['a_tkG3']) && $_COOKIE['a_tkG3'] != '' ){ 
 	$auth = $_COOKIE['a_tkG3'];
 }
